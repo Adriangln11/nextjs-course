@@ -1,5 +1,5 @@
 export interface Book {
-  id: string
+  id: string | number
   name: string
   author: string
   year: number | string
@@ -158,6 +158,17 @@ const api = {
     const book = books.find((book) => book.id == id)
     if (!book) throw new Error('Book not found')
     return book
+  },
+  search: async (query: string): Promise<Book[]> => {
+    const results = await api
+      .list()
+      .then((books) =>
+        books.filter((book) =>
+          book.name.toLowerCase().includes(query.toLowerCase())
+        )
+      )
+
+    return results
   },
 }
 export default api
